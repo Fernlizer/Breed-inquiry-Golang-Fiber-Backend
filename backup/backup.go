@@ -23,7 +23,7 @@ func BackupDatabase(cfg *config.Config) error {
 	if pgDumpPath == "" {
 		switch runtime.GOOS {
 		case "windows":
-			pgDumpPath = `"C:\Program Files\PostgreSQL\15\bin\pg_dump.exe"`
+			pgDumpPath = `"C:\Program Files\PostgreSQL\17\bin\pg_dump.exe"`
 		case "linux", "darwin":
 			pgDumpPath = "pg_dump" // ใช้จาก PATH
 		default:
@@ -58,7 +58,7 @@ func BackupDatabase(cfg *config.Config) error {
 	// ตั้งค่าให้ `pg_dump` ใช้ Password จาก ENV
 	cmd.Env = append(os.Environ(), fmt.Sprintf("PGPASSWORD=%s", cfg.Database.Password))
 
-	// 🚀 รันคำสั่ง Backup
+	//รันคำสั่ง Backup
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("database backup failed: %v", err)
 	}

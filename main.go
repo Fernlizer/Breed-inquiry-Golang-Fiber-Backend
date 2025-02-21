@@ -32,7 +32,7 @@ func main() {
 		log.Fatal("❌ Database connection failed:", err)
 	}
 
-	// ✅ ทดสอบ Database Connection
+	// ทดสอบ Database Connection
 	if err := database.TestConnection(db); err != nil {
 		log.Fatal("❌", err)
 	}
