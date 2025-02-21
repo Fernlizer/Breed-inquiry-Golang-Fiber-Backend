@@ -1,0 +1,20 @@
+# air.toml
+root = "."  
+tmp_dir = "tmp"
+
+[build]
+  bin = "tmp\\main.exe" # ใช้ .exe บน Windows
+  cmd = "go build -o tmp\\main.exe main.go"
+  exclude_dir = ["tests", "migrations", "tmp"]
+  include_ext = ["go", "toml", "yaml", "json"]
+  exclude_ext = ["md"]
+  exclude_file = ["air.toml"]
+
+[log]
+  time = false
+
+[serve]
+  watch_delay = 1000
+  reload_delay = 500
+  full_build = false
+  gracefull_shutdown = true

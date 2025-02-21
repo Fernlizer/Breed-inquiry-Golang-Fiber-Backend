@@ -1,0 +1,21 @@
+app:
+  name: "Breed Inquiry API"
+  env: "development"
+  port: 4000
+  enable_prefork: true
+  disable_startup_message: true
+  enable_print_routes: true
+
+database:
+  driver: "postgres"
+  host: "localhost"
+  port: 5432
+  user: "postgres"
+  password: "fern"
+  name: "greenmoons"
+  sslmode: "disable"
+
+backup:
+  enable: true
+  retention_days: 120
+  pg_dump_path: "C:\\Program Files\\PostgreSQL\\17\\bin\\pg_dump.exe"
