@@ -1,8 +1,7 @@
 package routes
 
 import (
-	"log"
-
+	"github.com/Fernlizer/Breed-inquiry-Golang-Fiber-Backend/api/handler"
 	"github.com/Fernlizer/Breed-inquiry-Golang-Fiber-Backend/api/middleware"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/healthcheck"
@@ -15,8 +14,8 @@ func SetupRoutes(app *fiber.App, db *gorm.DB) {
 	app.Use(middleware.AssignRequestID)
 	app.Use(middleware.RequestLogger())
 
-	// Health check สำหรับ Kubernetes
-	app.Get("/health", healthcheck.New()) // Health check
+	// Health check
+	app.Get("/health", healthcheck.New())
 
 	// Health check: Liveness and Readiness probes
 	app.Use(healthcheck.New(healthcheck.Config{
@@ -24,7 +23,6 @@ func SetupRoutes(app *fiber.App, db *gorm.DB) {
 			return true
 		},
 		LivenessEndpoint: "/live",
-
 		ReadinessProbe: func(c *fiber.Ctx) bool {
 			sqlDB, err := db.DB()
 			if err != nil {
@@ -45,18 +43,7 @@ func SetupRoutes(app *fiber.App, db *gorm.DB) {
 	api.Use(middleware.RateLimit())
 	api.Use(middleware.GZIPCompression())
 
-	// ตัวอย่าง Route อื่น ๆ
-	// api.Post("/breed-inquiry", handler.BreedInquiry)
-}
-
-
-// PrintRoutes แสดงรายการ Routes ทั้งหมด
-func PrintRoutes(app *fiber.App) {
-	stack := app.Stack()
-	log.Println("📋 Registered Routes:")
-	for _, group := range stack {
-		for _, route := range group {
-			log.Printf("%s %s", route.Method, route.Path)
-		}
-	}
+	// Breed Inquiry
+	breedHandler := handler.NewBreedHandler(db)
+	api.Post("/breed-inquiry", breedHandler.BreedInquiry)
 }

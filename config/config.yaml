@@ -2,9 +2,9 @@ app:
   name: "Breed Inquiry API"
   env: "development"
   port: 4000
-  enable_prefork: true
-  disable_startup_message: true
-  enable_print_routes: true
+  enable_prefork: false
+  disable_startup_message: false
+  enable_print_routes: false
 
 database:
   driver: "postgres"
