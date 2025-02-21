@@ -17,6 +17,10 @@ func NewDatabase(cfg *config.Config) (Database, error) {
 	switch cfg.Database.Driver {
 	case "postgres":
 		return &PostgresDB{}, nil
+	case "mysql":
+		return &MySQLDB{}, nil
+	case "mssql":
+		return &MSSQLDB{}, nil
 	default:
 		return nil, fmt.Errorf("unsupported database driver: %s", cfg.Database.Driver)
 	}

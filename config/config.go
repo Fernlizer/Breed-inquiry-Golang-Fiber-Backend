@@ -6,23 +6,36 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Config struct
+// Config โครงสร้างหลักของ Config
 type Config struct {
-	App struct {
-		Name string `mapstructure:"name"`
-		Env  string `mapstructure:"env"`
-		Port int    `mapstructure:"port"`
-	} `mapstructure:"app"`
+	App      AppConfig      `mapstructure:"app"`
+	Database DatabaseConfig `mapstructure:"database"`
+	Backup   BackupConfig   `mapstructure:"backup"`
+}
 
-	Database struct {
-		Driver   string `mapstructure:"driver"`
-		Host     string `mapstructure:"host"`
-		Port     int    `mapstructure:"port"`
-		User     string `mapstructure:"user"`
-		Password string `mapstructure:"password"`
-		Name     string `mapstructure:"name"`
-		SSLMode  string `mapstructure:"sslmode"`
-	} `mapstructure:"database"`
+// AppConfig กำหนดค่าของแอป
+type AppConfig struct {
+	Name string `mapstructure:"name"`
+	Env  string `mapstructure:"env"`
+	Port int    `mapstructure:"port"`
+}
+
+// DatabaseConfig กำหนดค่าของ Database
+type DatabaseConfig struct {
+	Driver   string `mapstructure:"driver"`
+	Host     string `mapstructure:"host"`
+	Port     int    `mapstructure:"port"`
+	User     string `mapstructure:"user"`
+	Password string `mapstructure:"password"`
+	Name     string `mapstructure:"name"`
+	SSLMode  string `mapstructure:"sslmode"`
+}
+
+//เพิ่ม BackupConfig
+type BackupConfig struct {
+	Enable     bool
+	PgDumpPath string
+	RetentionDays int `mapstructure:"retention_days"`
 }
 
 // LoadConfig โหลดค่าจากไฟล์และ ENV

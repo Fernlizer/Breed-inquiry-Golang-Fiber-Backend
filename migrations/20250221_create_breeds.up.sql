@@ -1,0 +1,9 @@
+CREATE TABLE breeds (
+    id VARCHAR(20) PRIMARY KEY, -- เปลี่ยนจาก UUID เป็น VARCHAR
+    name_th VARCHAR NOT NULL,
+    name_en VARCHAR NOT NULL,
+    short_name VARCHAR(30) NOT NULL,
+    remark VARCHAR,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
