@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"log"
+
 	"github.com/Fernlizer/Breed-inquiry-Golang-Fiber-Backend/api/middleware"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/healthcheck"
@@ -13,37 +15,48 @@ func SetupRoutes(app *fiber.App, db *gorm.DB) {
 	app.Use(middleware.AssignRequestID)
 	app.Use(middleware.RequestLogger())
 
-	// ใช้ Middleware Health Check ตามมาตรฐาน Kubernetes
-	app.Get("/health", healthcheck.New())
+	// Health check สำหรับ Kubernetes
+	app.Get("/health", healthcheck.New()) // Health check
 
+	// Health check: Liveness and Readiness probes
 	app.Use(healthcheck.New(healthcheck.Config{
-		// 🔹 Liveness Probe → ใช้ตรวจสอบว่า Server ยังทำงานอยู่หรือไม่
 		LivenessProbe: func(c *fiber.Ctx) bool {
-			return true // ถ้า Server ยังรันอยู่ ให้ return true
+			return true
 		},
-		LivenessEndpoint: "/live", // เช็ค Liveness ที่ `/live`
+		LivenessEndpoint: "/live",
 
-		// 🔹 Readiness Probe → ใช้ตรวจสอบว่า Database พร้อมทำงานหรือไม่
 		ReadinessProbe: func(c *fiber.Ctx) bool {
 			sqlDB, err := db.DB()
 			if err != nil {
 				return false
 			}
 			if err := sqlDB.Ping(); err != nil {
-				return false // ถ้า Database ใช้งานไม่ได้ ให้ return false
+				return false
 			}
-			return true // ถ้าทุกอย่างพร้อมใช้งาน ให้ return true
+			return true
 		},
-		ReadinessEndpoint: "/ready", // เช็ค Readiness ที่ `/ready`
+		ReadinessEndpoint: "/ready",
 	}))
 
-	// Apply Global Middleware
+	// กำหนด API Routes เพิ่มเติม
 	api := app.Group("/api")
 	api.Use(middleware.Recover())
 	api.Use(middleware.CORS())
 	api.Use(middleware.RateLimit())
 	api.Use(middleware.GZIPCompression())
 
-	// API Endpoints (เพิ่มในภายหลัง)
+	// ตัวอย่าง Route อื่น ๆ
 	// api.Post("/breed-inquiry", handler.BreedInquiry)
+}
+
+
+// PrintRoutes แสดงรายการ Routes ทั้งหมด
+func PrintRoutes(app *fiber.App) {
+	stack := app.Stack()
+	log.Println("📋 Registered Routes:")
+	for _, group := range stack {
+		for _, route := range group {
+			log.Printf("%s %s", route.Method, route.Path)
+		}
+	}
 }

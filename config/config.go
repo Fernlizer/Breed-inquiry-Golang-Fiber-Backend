@@ -15,9 +15,12 @@ type Config struct {
 
 // AppConfig กำหนดค่าของแอป
 type AppConfig struct {
-	Name string `mapstructure:"name"`
-	Env  string `mapstructure:"env"`
-	Port int    `mapstructure:"port"`
+	Name                  string `mapstructure:"name"`
+	Env                   string `mapstructure:"env"`
+	Port                  int    `mapstructure:"port"`
+	EnablePrefork         bool   `mapstructure:"enable_prefork"`
+	DisableStartupMessage bool   `mapstructure:"disable_startup_message"`
+	EnablePrintRoutes     bool   `mapstructure:"enable_print_routes"`
 }
 
 // DatabaseConfig กำหนดค่าของ Database
@@ -31,20 +34,20 @@ type DatabaseConfig struct {
 	SSLMode  string `mapstructure:"sslmode"`
 }
 
-//เพิ่ม BackupConfig
+// BackupConfig สำหรับการ backup database
 type BackupConfig struct {
-	Enable     bool
-	PgDumpPath string
-	RetentionDays int `mapstructure:"retention_days"`
+	Enable        bool   `mapstructure:"enable"`
+	PgDumpPath    string `mapstructure:"pg_dump_path"`
+	RetentionDays int    `mapstructure:"retention_days"`
 }
 
 // LoadConfig โหลดค่าจากไฟล์และ ENV
 func LoadConfig() (*Config, error) {
-	viper.SetConfigName("config") // ต้องไม่มี ".yaml"
+	viper.SetConfigName("config") // ไม่ต้องมี ".yaml"
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath(".")      // ค้นหาใน root directory
+	viper.AddConfigPath(".")        // ค้นหาใน root directory
 	viper.AddConfigPath("./config") // ค้นหาในโฟลเดอร์ config
-	viper.AutomaticEnv()          // รองรับค่าจาก ENV Variables
+	viper.AutomaticEnv()            // รองรับค่าจาก ENV Variables
 
 	if err := viper.ReadInConfig(); err != nil {
 		log.Println("⚠️ Warning: No config.yaml found, using defaults & ENV")

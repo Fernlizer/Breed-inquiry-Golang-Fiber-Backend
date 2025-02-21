@@ -38,7 +38,10 @@ func main() {
 	}
 
 	// สร้าง Fiber App
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		DisableStartupMessage: cfg.App.DisableStartupMessage,
+		EnablePrintRoutes:     cfg.App.EnablePrintRoutes,
+	})
 
 	// กำหนด Routes
 	routes.SetupRoutes(app, db)

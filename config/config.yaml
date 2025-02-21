@@ -1,16 +1,21 @@
 app:
   name: "Breed Inquiry API"
-  env: "development" # development, production
+  env: "development"
   port: 4000
+  enable_prefork: true
+  disable_startup_message: true
+  enable_print_routes: true
+
 database:
-  driver: "postgres" # postgres, mysql
+  driver: "postgres"
   host: "localhost"
   port: 5432
   user: "postgres"
   password: "fern"
   name: "greenmoons"
   sslmode: "disable"
+
 backup:
   enable: true
-  retention_days: 120 # กำหนดให้เก็บไฟล์ backup ไว้ 120 วัน
-  pgDumpPath: 'C:\Program Files\PostgreSQL\17\bin\pg_dump.exe' # ว่างไว้ใช้ค่าเริ่มต้นของ OS
+  retention_days: 120
+  pg_dump_path: "C:\\Program Files\\PostgreSQL\\17\\bin\\pg_dump.exe"
